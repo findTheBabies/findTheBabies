@@ -3,6 +3,13 @@
 // bookmarks (list <=20 containing only mission, updates, resources, community),
 // updatedAt (timestamp set with serverTimestamp()). No case or intake data.
 // Ownership is the immutable document path. Admin is a server-set custom claim.
+//
+// alerts/{id}: official missing-child alerts. Public can read ACTIVE alerts only.
+// Only verified admins post them, and every alert must cite an official source
+// URL and a case number. When an alert is no longer active, the photo and
+// description must be cleared so a found child's details stop circulating.
+// subscriptions/{uid}: a member's alert area (zip + radius) and channels, private.
+// alertStats/{id} and mail/{id} are written only by Cloud Functions (Admin SDK).
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
@@ -33,6 +40,76 @@ service cloud.firestore {
     // and remove member profiles but never edit someone else's content.
     function isAdmin() {
       return isAuthenticated() && request.auth.token.admin == true;
+    }
+
+    function isVerifiedAdmin() {
+      return isAdmin() && request.auth.token.email_verified == true;
+    }
+
+    function isHttpsUrl(value) {
+      return value is string && value.size() <= 500 && value.matches('https://[^\\s<>"]+');
+    }
+
+    function isValidAlert(data) {
+      let fields = ['childName', 'age', 'description', 'lastSeenCity', 'lastSeenState',
+        'lastSeenZip', 'lastSeenAt', 'photoUrl', 'sourceName', 'sourceUrl', 'caseNumber',
+        'contactPhone', 'alertType', 'status', 'radiusMiles', 'createdBy', 'createdAt',
+        'updatedAt', 'expiresAt'];
+      return data.keys().hasAll(fields) && data.keys().hasOnly(fields)
+        && data.childName is string && data.childName.size() > 0 && data.childName.size() <= 100
+        && data.age is int && data.age >= 0 && data.age <= 20
+        && data.description is string && data.description.size() <= 1000
+        && data.lastSeenCity is string && data.lastSeenCity.size() > 0 && data.lastSeenCity.size() <= 100
+        && data.lastSeenState is string && data.lastSeenState.matches('[A-Z]{2}')
+        && data.lastSeenZip is string && data.lastSeenZip.matches('[0-9]{5}')
+        && data.lastSeenAt is timestamp
+        && (data.photoUrl == '' || isHttpsUrl(data.photoUrl))
+        && data.sourceName is string && data.sourceName.size() > 0 && data.sourceName.size() <= 100
+        && isHttpsUrl(data.sourceUrl)
+        && data.caseNumber is string && data.caseNumber.size() > 0 && data.caseNumber.size() <= 60
+        && data.contactPhone is string && data.contactPhone.size() > 0 && data.contactPhone.size() <= 30
+        && data.alertType in ['amber', 'endangered', 'missing']
+        && data.status in ['active', 'found', 'closed']
+        && data.radiusMiles in [10, 25, 50, 100, 250]
+        && data.createdBy is string
+        && data.createdAt is timestamp
+        && data.updatedAt == request.time
+        && data.expiresAt is timestamp
+        // Resolved alerts keep no photo or description.
+        && (data.status == 'active' || (data.photoUrl == '' && data.description == ''));
+    }
+
+    function isValidSubscription(data) {
+      let fields = ['zip', 'radiusMiles', 'push', 'email', 'tokens', 'updatedAt'];
+      return data.keys().hasAll(fields) && data.keys().hasOnly(fields)
+        && data.zip is string && data.zip.matches('[0-9]{5}')
+        && data.radiusMiles in [10, 25, 50, 100]
+        && data.push is bool && data.email is bool
+        && data.tokens is list && data.tokens.size() <= 5
+        && data.updatedAt == request.time;
+    }
+
+    match /alerts/{alertId} {
+      allow get, list: if resource.data.status == 'active' || isAdmin();
+      allow create: if isVerifiedAdmin() && isValidAlert(request.resource.data)
+        && request.resource.data.status == 'active'
+        && request.resource.data.createdBy == request.auth.uid
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.expiresAt > request.time;
+      allow update: if isVerifiedAdmin() && isValidAlert(request.resource.data)
+        && request.resource.data.createdBy == resource.data.createdBy
+        && request.resource.data.createdAt == resource.data.createdAt;
+      allow delete: if isVerifiedAdmin();
+    }
+
+    match /alertStats/{alertId} {
+      allow read: if isAdmin();
+    }
+
+    match /subscriptions/{uid} {
+      allow get: if isOwner(uid);
+      allow create, update: if canWrite(uid) && isValidSubscription(request.resource.data);
+      allow delete: if isOwner(uid);
     }
 
     match /profiles/{uid} {

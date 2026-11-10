@@ -1,0 +1,1 @@
+{"firestore":{"rules":"firestore.rules"},"functions":[{"source":"functions","codebase":"default","runtime":"nodejs22"}],"emulators":{"firestore":{"host":"127.0.0.1","port":8181},"auth":{"host":"127.0.0.1","port":9199},"functions":{"host":"127.0.0.1","port":5101},"hub":{"port":4501},"logging":{"port":4601},"eventarc":{"port":9399},"ui":{"enabled":false},"singleProjectMode":true}}

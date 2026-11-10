@@ -7,25 +7,25 @@ export const brands = {
     "mark": "star",
     "eyebrow": "Every child deserves to be safe",
     "title": [
-      "Keep hope visible.",
-      "Help families find support."
+      "Every child found.",
+      "Every neighbor watching."
     ],
-    "description": "A developing initiative to make trusted missing-child resources easier to find and help communities share information responsibly.",
+    "description": "Get official missing-child alerts for your area the moment they\u2019re issued, and help spread them fast. Verified sources only, no rumors.",
     "label": "Built around care, dignity & verified information",
-    "heading": "Care comes first. So does accuracy.",
-    "about": "FindTheBabies is beginning with a resource-focused approach: connect families to established reporting channels, respect children’s privacy, and share verified information without speculation.",
+    "heading": "Fast, and accurate.",
+    "about": "FindTheBabies turns neighbors into a network. Every alert comes from law enforcement or NCMEC and links to its official source. Sightings go straight to investigators, and once a child is found, their photo and details come down.",
     "pillars": [
       [
-        "Find support",
-        "Direct families to established missing-child reporting and support resources."
+        "Alerts near you",
+        "Pick your zip code and radius. Get an email or a notification on your device when an official alert is issued nearby."
       ],
       [
-        "Share responsibly",
-        "Prioritize verified information and respect a child’s dignity and privacy."
+        "Verified only",
+        "Every alert cites the agency, case number, and official link. No rumors, no guesses about suspects, no vigilante action."
       ],
       [
-        "Stay connected",
-        "Create a foundation for careful, constructive community involvement."
+        "Spread it fast",
+        "Share, post, or print a poster for any alert with one tap, so the right information reaches as many eyes as possible."
       ]
     ],
     "resources": [
@@ -55,14 +55,15 @@ export const brands = {
       ]
     ],
     "roadmap": [
-      "Publish trusted support resources",
-      "Develop responsible sharing guidelines",
-      "Explore partnerships with established organizations"
+      "Official alerts, area notifications, and share kits",
+      "Family-submitted alerts after verification, and sighting reports routed to investigators",
+      "Coordinated volunteer searches with law enforcement and partner organizations"
     ],
     "footer": "Hope, with care and responsibility.",
     "cardTitle": "A light kept on",
     "cardSub": "For children. For families. For hope.",
     "contact": "contact@findthebabies.org",
-    "notice": "If a child is missing or in immediate danger, contact local law enforcement or emergency services. This site is not an emergency reporting service and does not accept case reports, tips, photos, or identifying information about children."
+    "notice": "If a child is missing or in immediate danger, call 911. This site is not an emergency service. It shares official alerts only and does not accept case reports, tips, or photos from the public. Report sightings to 911 or the agency named in the alert.",
+    "vapidKey": "BCA0mSKHIRAfZZbJLLHbHtkO064Ax17jytXAHm7lyMjtLUEWsBg_61m6mLeLd9jQkLmMH7bng3cdTIqkDNyKCWg"
   }
 };

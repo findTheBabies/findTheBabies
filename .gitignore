@@ -8,3 +8,4 @@ operations/
 screenshots/
 .env
 .env.*
+functions/node_modules/
