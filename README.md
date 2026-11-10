@@ -33,7 +33,7 @@ firebase deploy --only functions           # needs the Blaze plan
 3. Email: install the "Trigger Email from Firestore" extension (collection `mail`) with the Zoho SMTP account.
 4. Admin: `node scripts/set-admin.cjs <email>` (add `--revoke` to remove). The person must sign out and back in to pick it up.
 
-Status (Nov 9, 2026): project on Blaze; `notifyAlertArea` live in us-west2 (same region as Firestore); web push key added; owner account is admin; hosting + rules + index deployed. Email: `extensions/firestore-send-email.env` is pre-filled for Zoho (`smtppro.zoho.com:465`, mailbox jonathan@w3develops.org, reply-to contact@findthebabies.org). Finish with `firebase deploy --only extensions` and type the mailbox password (or a Zoho app-specific password) when prompted.
+Status (Nov 9, 2026): project on Blaze; `notifyAlertArea` live in us-west2 (same region as Firestore); web push key added; owner account is admin; hosting + rules + index deployed. Email: `extensions/firestore-send-email.env` is pre-filled for Zoho (`smtppro.zoho.com:465`, mailbox jonathan@w3develops.org, sending as its alias contact@findthebabies.org). Finish with `firebase deploy --only extensions` and type the mailbox password (or a Zoho app-specific password) when prompted.
 
 DNS is on Cloudflare; mail is Zoho. `scripts/connect-domains.mjs` only adds the Firebase records and refuses to run if mail records would change.
 
