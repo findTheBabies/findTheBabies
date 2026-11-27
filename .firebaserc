@@ -1,5 +1,13 @@
 {
   "projects": {
     "default": "studio-578944933-7a8c8"
+  },
+  "targets": {},
+  "etags": {
+    "studio-578944933-7a8c8": {
+      "extensionInstances": {
+        "firestore-send-email": "4b91973a6cd367bb49bcfc0045d955eb6bada753280863a12133cbb49491e5c8"
+      }
+    }
   }
 }
